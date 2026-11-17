@@ -339,6 +339,17 @@ export function Contact() {
               <p className="type-lead mt-5 max-w-md leading-[1.65] text-[#525852]">
                 {form.description}
               </p>
+              <div className="mt-6">
+                <p className="text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[#525852]">
+                  Email us
+                </p>
+                <a
+                  href="mailto:saim@solvingodds.com"
+                  className="editorial-link mt-2 inline-block break-all text-[1.05rem] font-medium text-[#151817] underline decoration-[#151817]/30 underline-offset-4 transition-colors hover:decoration-[#151817]"
+                >
+                  saim@solvingodds.com
+                </a>
+              </div>
 
               <div className="mt-8 space-y-4 border-t border-[#151817]/14 pt-6 text-[0.88rem] leading-[1.6] text-[#525852]">
                 <p>

@@ -78,6 +78,12 @@ export function Footer() {
             <p className="max-w-md text-[0.98rem] leading-[1.65] text-[#A8AEA8]">
               {BRAND.footerSummary}
             </p>
+            <a
+              href="mailto:saim@solvingodds.com"
+              className="editorial-link mt-5 inline-block break-all text-[0.98rem] text-white transition-colors hover:text-[#B7F536]"
+            >
+              saim@solvingodds.com
+            </a>
 
             <div className="mt-7 flex flex-wrap items-center gap-5">
               <SiteLink
