@@ -440,28 +440,64 @@ export const SERVICES: Record<string, Service> = {
     },
     offerings: [
       {
-        title: "Provider Credentialing & Enrollment",
+        title: "Medical Billing",
         description:
-          "Support with provider credentialing and enrollment processes involving government and commercial insurance payers. We help organize the administrative requirements and follow-up appropriate to the agreed enrollment scope.",
-        image: media.review,
-      },
-      {
-        title: "Medical Billing Services",
-        description:
-          "Support with medical billing workflows and the administrative processes involved in healthcare reimbursement. The scope is shaped around your practice's existing processes and agreed responsibilities.",
+          "We handle medical billing processes, including claim preparation, submission, and payment tracking. Our support helps healthcare practices maintain organized billing workflows and follow up on outstanding reimbursements.",
         image: media.billing,
       },
       {
-        title: "Claim Creation & Production",
+        title: "Medical Billing Audit",
         description:
-          "Preparation and production of medical claims using the information required for the applicable billing process. We work within agreed workflows and clarify information requirements with your practice team.",
+          "We review billing procedures, submitted claims, and payment records to identify potential errors and discrepancies. Our auditing support helps practices recognize improvement opportunities and maintain more accurate billing processes.",
+        image: media.review,
+      },
+      {
+        title: "Prior Authorization",
+        description:
+          "We assist with insurance prior authorization requests, required documentation, and payer follow-ups. Our team helps practices coordinate authorization processes and track pending requests.",
         image: media.documents,
+      },
+      {
+        title: "Revenue Cycle Management (RCM)",
+        description:
+          "We provide revenue cycle support covering patient eligibility verification, claims processing, payment tracking, and follow-up. Our services help healthcare practices coordinate administrative billing activities throughout the revenue cycle.",
+        image: media.billing,
       },
       {
         title: "Accounts Receivable (A/R) Follow-Up",
         description:
-          "Review and follow-up support for outstanding claims and unpaid balances as part of the revenue cycle. We help organize follow-up activity and communicate the status of items within the agreed scope.",
+          "We monitor outstanding claims and unpaid insurance balances to identify items requiring attention. Our team follows up with payers and tracks unresolved payments to support organized accounts receivable management.",
         image: media.review,
+      },
+      {
+        title: "Virtual Assistant Services",
+        description:
+          "We provide remote administrative assistance for healthcare practices, including appointment coordination, routine communications, and documentation support. Our virtual assistants help manage daily administrative responsibilities within agreed workflows.",
+        image: media.billing,
+      },
+      {
+        title: "Insurance Verification",
+        description:
+          "We assist with verifying patient insurance eligibility, coverage details, and benefit information. Our support helps practices identify coverage-related questions before services are provided.",
+        image: media.documents,
+      },
+      {
+        title: "Credentialing & Contracting",
+        description:
+          "We assist healthcare providers with credentialing, insurance enrollment, payer contracting documentation, and application follow-ups. Our support helps practices manage administrative requirements for participating in insurance networks.",
+        image: media.review,
+      },
+      {
+        title: "Denial Management",
+        description:
+          "We review denied claims, identify reported denial reasons, and assist with corrections, resubmissions, and appropriate appeals. Our support helps practices track denials and manage unresolved claims.",
+        image: media.documents,
+      },
+      {
+        title: "Front Desk Support",
+        description:
+          "We provide remote front-desk assistance with appointment scheduling, patient registration coordination, and routine administrative communication. Our support helps healthcare practices organize daily front-office activities.",
+        image: media.billing,
       },
     ],
     process: [
