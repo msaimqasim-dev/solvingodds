@@ -56,16 +56,7 @@ const VALID_SERVICES = new Set<string>(
 /** Web3Forms public form endpoint (browser-side submission only). */
 export const WEB3FORMS_ENDPOINT = "https://api.web3forms.com/submit";
 
-/**
- * Web3Forms access key. Public by design: it only routes submissions to the
- * configured SolvingOdds inbox and cannot read account data.
- * An environment value can override it if the key is ever rotated.
- */
-const WEB3FORMS_ACCESS_KEY =
-  (
-    (import.meta.env.VITE_WEB3FORMS_ACCESS_KEY as string | undefined) ??
-    "c38e0931-ea9f-4924-ae01-94251ee21bc5"
-  ).trim();
+const WEB3FORMS_ACCESS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY?.trim() ?? "";
 
 const REQUEST_TIMEOUT_MS = 15000;
 const DUPLICATE_WINDOW_MS = 60000;
@@ -73,14 +64,6 @@ const DUPLICATE_WINDOW_MS = 60000;
 let inFlight = false;
 let lastDeliveredSubmission: { fingerprint: string; timestamp: number } | null =
   null;
-
-export function getWeb3FormsAccessKey(): string {
-  return WEB3FORMS_ACCESS_KEY;
-}
-
-export function isContactDeliveryConfigured(): boolean {
-  return WEB3FORMS_ACCESS_KEY.length > 0;
-}
 
 export function validateContactField(
   field: ContactFieldName,
@@ -271,7 +254,7 @@ export async function submitContactInquiry(
       return {
         status: "success",
         message:
-          "Thank you for reaching out. Your inquiry has been delivered, and we'll review the details you shared.",
+          "Thank you for reaching out. Your inquiry has been submitted, and we'll review the details you shared.",
       };
     }
 

@@ -1,9 +1,3 @@
 {
-  "rewrites": [
-    { "source": "/services", "destination": "/index.html" },
-    { "source": "/services/:path*", "destination": "/index.html" },
-    { "source": "/about", "destination": "/index.html" },
-    { "source": "/contact", "destination": "/index.html" },
-    { "source": "/:path*", "destination": "/index.html" }
-  ]
+  "framework": "nextjs"
 }

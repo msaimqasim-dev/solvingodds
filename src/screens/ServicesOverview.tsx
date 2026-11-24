@@ -1,7 +1,5 @@
-import { useRef } from "react";
+import { EditorialMotion } from "../components/EditorialMotion";
 import { SERVICE_LIST, SERVICES_OVERVIEW, servicePath } from "../data/services";
-import { useEditorialMotion } from "../hooks/useEditorialMotion";
-import { usePageMetadata } from "../hooks/usePageMetadata";
 import { ServiceHero } from "../components/services/ServiceHero";
 import { EditorialHeading } from "../components/services/EditorialHeading";
 import { ServiceProcess } from "../components/services/ServiceProcess";
@@ -12,16 +10,9 @@ import { KineticButton } from "../components/ui/KineticButton";
 import { SiteLink } from "../components/ui/SiteLink";
 
 export function ServicesOverview() {
-  const pageRef = useRef<HTMLDivElement>(null);
-  useEditorialMotion(pageRef);
-  usePageMetadata({
-    ...SERVICES_OVERVIEW.seo,
-    path: "/services",
-    image: SERVICES_OVERVIEW.image.src,
-  });
 
   return (
-    <div ref={pageRef} className="services-page" data-page="services-overview">
+    <EditorialMotion className="services-page" data-page="services-overview">
       <ServiceHero
         eyebrow={SERVICES_OVERVIEW.eyebrow}
         lines={SERVICES_OVERVIEW.heroLines}
@@ -139,6 +130,6 @@ export function ServicesOverview() {
 
       <ServiceProcess steps={SERVICES_OVERVIEW.process} overview />
       <ServiceCTA content={SERVICES_OVERVIEW.cta} />
-    </div>
+    </EditorialMotion>
   );
 }

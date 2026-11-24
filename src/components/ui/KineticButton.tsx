@@ -1,3 +1,5 @@
+"use client";
+
 import { SiteLink } from "./SiteLink";
 
 type ButtonVariant =

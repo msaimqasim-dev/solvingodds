@@ -1,4 +1,6 @@
-import { useState } from "react";
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 
 interface EditorialImageProps {
   src: string;
@@ -24,6 +26,13 @@ export function EditorialImage({
   tone = "dark",
 }: EditorialImageProps) {
   const [failed, setFailed] = useState(false);
+  const imageRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    // An image in the initial HTML can fail before React attaches onError.
+    const image = imageRef.current;
+    if (image?.complete && image.naturalWidth === 0) setFailed(true);
+  }, [src]);
 
   if (failed) {
     const isDark = tone === "dark";
@@ -66,6 +75,7 @@ export function EditorialImage({
       } ${className}`}
     >
       <img
+        ref={imageRef}
         src={src}
         alt={alt}
         loading={priority ? "eager" : "lazy"}

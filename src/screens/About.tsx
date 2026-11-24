@@ -1,9 +1,10 @@
+"use client";
+
 import { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ABOUT_PAGE } from "../data/about";
 import { useEditorialMotion } from "../hooks/useEditorialMotion";
-import { usePageMetadata } from "../hooks/usePageMetadata";
 import { EditorialHeading } from "../components/services/EditorialHeading";
 import { ServiceCTA } from "../components/services/ServiceCTA";
 import { EditorialImage } from "../components/ui/EditorialImage";
@@ -22,11 +23,6 @@ export function About() {
   const [activeStage, setActiveStage] = useState<number>(0);
 
   useEditorialMotion(pageRef);
-  usePageMetadata({
-    ...ABOUT_PAGE.seo,
-    path: "/about",
-    image: ABOUT_PAGE.hero.image.src,
-  });
 
   useLayoutEffect(() => {
     const hero = heroRef.current;

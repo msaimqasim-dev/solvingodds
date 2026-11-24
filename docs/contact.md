@@ -1,60 +1,16 @@
-# Contact Form
+# Contact form delivery
 
-The `/contact` page posts inquiries directly from the browser to **Web3Forms**, which emails the submission to the inbox linked to the configured access key.
+The contact form submits to Web3Forms from the browser. Web3Forms routes each inquiry to the destination configured for its access key. Replying to an inquiry uses the visitor’s email address.
 
-## Configuration
+## Local setup
 
-- Endpoint: `https://api.web3forms.com/submit`
-- Access key: `c38e0931-ea9f-4924-ae01-94251ee21bc5` (default in `src/services/contactSubmission.ts`)
-- Optional override: set `VITE_WEB3FORMS_ACCESS_KEY` at build time if the key is rotated.
+1. Find the access key for the existing SolvingOdds form in Web3Forms and confirm its destination inbox.
+2. Add `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY=YOUR_EXISTING_WEB3FORMS_KEY` to `.env.local` in the project root. Replace the placeholder with the actual access key. This public browser key is intended for use in the form.
+3. Stop the old development or preview server. Run `npm.cmd run dev -- --port 3010` and open `http://localhost:3010/contact`.
+4. Submit a clearly labeled test inquiry when ready. The success message confirms Web3Forms accepted the submission. Check the configured inbox and Junk folder to confirm delivery.
 
-Web3Forms access keys are public by design. They only route submissions to the configured inbox and cannot read account data or past submissions. No secret should be committed.
+For Vercel, add the same variable in **Project Settings → Environment Variables**, then rebuild the intended deployment. Next.js embeds public environment variables in the browser bundle at build time.
 
-## Payload
+If you previously configured direct mail, open `.env.local` yourself and delete the lines whose names start with `SMTP_`. You can also remove the old `CONTACT_EMAIL_TO` line. Keep the file and its `NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY` entry.
 
-Each submission includes:
-
-- `access_key`, `subject` (includes the selected service), `from_name`
-- `name` (Full Name), `email` (also used as `replyto`)
-- `company` (or "Not provided")
-- `service` (human-readable label)
-- `message`
-- `source` (`https://solvingodds.com/contact`)
-- `botcheck: false` (Web3Forms honeypot)
-
-## Validation And States
-
-- Client-side validation runs on blur and on submit for full name, email format, service selection, and message length.
-- Inline errors use `aria-invalid`, `aria-describedby`, and `role="alert"`; focus moves to the first invalid field.
-- The submit button shows a "Sending Inquiry..." loading state and is disabled while a request is in flight.
-- A success confirmation appears **only** when Web3Forms returns HTTP 200 with `success: true`. The form is then cleared.
-- Failures show the provider's message (or a retry message) and preserve the visitor's input so nothing is lost.
-- A 15-second timeout prevents indefinite loading.
-
-## Spam And Duplicate Protection
-
-- Hidden off-screen `website` honeypot blocks automated submissions before any network request.
-- Web3Forms `botcheck` honeypot is included on every request.
-- In-flight submissions are rejected while a request is active.
-- An identical submission fingerprint is rejected for 60 seconds after a confirmed delivery.
-- Web3Forms applies its own server-side spam checks and rate limits; HTTP 429 shows a wait-and-retry message.
-
-## Medical Billing Safety
-
-The form always displays: "Please do not include patient information or sensitive medical details in your message." It does not request patient, insurance, or clinical information.
-
-## Removed Section
-
-The former "Other Ways to Connect / Prefer reaching out directly?" block was removed from the Contact page because it contained no verified direct-contact details. The form is the single inquiry channel.
-
-## Verification Status
-
-Verified in automated browser tests:
-
-- The removed direct-contact section is gone; the page now flows from the form straight to the FAQ.
-- The outgoing payload contains the access key and all form values (see Payload above).
-- Client validation blocks network requests and focuses the first invalid field.
-- Loading state, confirmation-only success, form clear, duplicate prevention, honeypot spam block, provider `success:false`, and HTTP `500` error handling all behave correctly.
-- Mobile layout, touch target size, and WCAG AA axe checks pass.
-
-**Live inbox delivery could not be confirmed from this build environment.** `api.web3forms.com` returns a Cloudflare challenge page to automated data-center traffic, so the browser receives a CORS preflight rejection before Web3Forms can process the request. This is environmental, not a form-logic issue: Web3Forms' own troubleshooting guide confirms `application/json` from client-side code is the supported pattern, and the form already uses it. Please submit one test inquiry from the deployed `https://solvingodds.com/contact` page to confirm the inbox receives it. If delivery is still rejected in production, verify the access key in the Web3Forms dashboard and check for domain restriction or rate-limit settings.
+The form validates the fields, blocks submissions that fill its honeypot, and retains input after delivery errors. The browser QA suite intercepts Web3Forms requests to exercise responses without sending real messages.

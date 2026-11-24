@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import type { Service } from "../../data/services";
 import { EditorialImage } from "../ui/EditorialImage";

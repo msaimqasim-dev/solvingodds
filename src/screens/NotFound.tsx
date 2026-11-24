@@ -1,17 +1,7 @@
 import { KineticButton } from "../components/ui/KineticButton";
 import { EditorialTag } from "../components/ui/EditorialTag";
-import { usePageMetadata } from "../hooks/usePageMetadata";
-import { useLocation } from "react-router-dom";
 
 export function NotFound() {
-  const { pathname } = useLocation();
-  usePageMetadata({
-    title: "Page Not Found | SolvingOdds",
-    description:
-      "This page is not available. Explore SolvingOdds services or return to the homepage.",
-    path: pathname,
-    noIndex: true,
-  });
   return (
     <section
       data-surface="dark"

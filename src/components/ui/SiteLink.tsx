@@ -1,5 +1,7 @@
+"use client";
+
 import { forwardRef, type AnchorHTMLAttributes } from "react";
-import { Link, useLocation } from "react-router-dom";
+import Link from "next/link";
 import { scrollToAnchor, scrollToPageTop } from "../../utils/smoothScroll";
 
 type SiteLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & { href: string };
@@ -7,8 +9,7 @@ type SiteLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & { href: string };
 // Keep real link URLs and native modified-click behavior while sharing smooth anchors.
 export const SiteLink = forwardRef<HTMLAnchorElement, SiteLinkProps>(
   function SiteLink({ href, onClick, children, ...props }, ref) {
-    const { pathname, search } = useLocation();
-    if (!href.startsWith("/") && !href.startsWith("#")) {
+    if (href.startsWith("//") || (!href.startsWith("/") && !href.startsWith("#"))) {
       return (
         <a ref={ref} href={href} onClick={onClick} {...props}>
           {children}
@@ -18,7 +19,8 @@ export const SiteLink = forwardRef<HTMLAnchorElement, SiteLinkProps>(
     return (
       <Link
         ref={ref}
-        to={href}
+        href={href}
+        scroll={false}
         {...props}
         onClick={(event) => {
           onClick?.(event);
@@ -33,8 +35,8 @@ export const SiteLink = forwardRef<HTMLAnchorElement, SiteLinkProps>(
             return;
           const destination = new URL(href, window.location.href);
           if (
-            destination.pathname === pathname &&
-            destination.search === search
+            destination.pathname === window.location.pathname &&
+            destination.search === window.location.search
           ) {
             if (destination.hash) scrollToAnchor(destination.hash, event);
             else {

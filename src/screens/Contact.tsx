@@ -1,3 +1,5 @@
+"use client";
+
 import {
   useEffect,
   useLayoutEffect,
@@ -6,13 +8,11 @@ import {
   type ChangeEvent,
   type FormEvent,
 } from "react";
-import { useSearchParams } from "react-router-dom";
 import gsap from "gsap";
 import {
   CONTACT_PAGE,
   CONTACT_SERVICE_OPTIONS,
   getServiceLabelByValue,
-  resolveServiceFromQuery,
   type ContactServiceValue,
 } from "../data/contact";
 import {
@@ -25,7 +25,6 @@ import {
   type ContactSubmissionResult,
 } from "../services/contactSubmission";
 import { useEditorialMotion } from "../hooks/useEditorialMotion";
-import { usePageMetadata } from "../hooks/usePageMetadata";
 import { EditorialHeading } from "../components/services/EditorialHeading";
 import { EditorialTag } from "../components/ui/EditorialTag";
 import { FaqAccordion } from "../components/ui/FaqAccordion";
@@ -52,9 +51,7 @@ function createInitialValues(
   };
 }
 
-export function Contact() {
-  const [searchParams] = useSearchParams();
-  const queryService = resolveServiceFromQuery(searchParams.get("service"));
+export function Contact({ queryService }: { queryService: ContactServiceValue | "" }) {
 
   const pageRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLElement>(null);
@@ -73,10 +70,6 @@ export function Contact() {
   const [submittedServiceLabel, setSubmittedServiceLabel] = useState("");
 
   useEditorialMotion(pageRef);
-  usePageMetadata({
-    ...CONTACT_PAGE.seo,
-    path: "/contact",
-  });
 
   // Sync service dropdown whenever URL ?service= parameter changes
   useEffect(() => {

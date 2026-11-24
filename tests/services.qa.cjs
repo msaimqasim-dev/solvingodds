@@ -1,10 +1,11 @@
-/* Full-site QA: run against Vite dev or preview with Playwright and axe on NODE_PATH. */
+/* Full-site QA: run against next start with Playwright and axe on NODE_PATH. */
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const { chromium } = require("playwright");
 const AxeBuilder = require("@axe-core/playwright").default;
 
-const base = process.env.QA_BASE_URL || "http://localhost:5173";
+const base = process.env.QA_BASE_URL || "http://localhost:3000";
+const web3FormsEndpoint = "https://api.web3forms.com/submit";
 const routes = [
   {
     path: "/",
@@ -43,16 +44,17 @@ const routes = [
   },
 ];
 const validPaths = new Set(routes.map((route) => route.path));
+const missingPaths = ["/services/not-a-service", "/portfolio"];
 const consoleErrors = [];
 const loadedImages = new Set();
 const results = [];
 const vitals = [];
 
-async function ready(page, path) {
+async function ready(page, path, status = 200) {
   const response = await page.goto(base + path, {
     waitUntil: "domcontentloaded",
   });
-  assert.equal(response.status(), 200);
+  assert.equal(response.status(), status);
   await page.locator("main h1").waitFor();
   await page.evaluate(() => document.fonts.ready);
 }
@@ -95,6 +97,7 @@ async function loadImages(page) {
   fs.mkdirSync("artifacts", { recursive: true });
   const browser = await chromium.launch({
     headless: true,
+    channel: process.env.QA_BROWSER_CHANNEL || undefined,
     args: ["--no-sandbox"],
   });
   try {
@@ -102,13 +105,18 @@ async function loadImages(page) {
       reducedMotion: "reduce",
       viewport: { width: 1440, height: 1000 },
     });
+    await context.route(web3FormsEndpoint, (route) => route.abort("failed"));
     const page = await context.newPage();
     page.on("pageerror", (error) => consoleErrors.push(error.message));
     page.on("console", (message) => {
-      if (message.type() === "error") consoleErrors.push(message.text());
+      if (message.type() !== "error") return;
+      const url = message.location().url;
+      if (url && missingPaths.includes(new URL(url, base).pathname) &&
+          message.text().includes("status of 404")) return;
+      consoleErrors.push(message.text());
     });
 
-    for (const width of [1920, 1440, 1280, 1024, 768, 430, 390, 360]) {
+    for (const width of [1920, 1440, 1280, 1024, 768, 430, 390, 375, 360]) {
       await page.setViewportSize({ width, height: width < 768 ? 844 : 1000 });
       for (const route of routes) {
         await ready(page, route.path);
@@ -119,7 +127,7 @@ async function loadImages(page) {
         assert.equal(headline, route.headline);
         assert.equal(await page.title(), route.title);
         assert.equal(
-          await page.locator('link[rel="canonical"]').getAttribute("href"),
+          new URL(await page.locator('link[rel="canonical"]').getAttribute("href")).href,
           "https://solvingodds.com" + route.path,
         );
         assert.ok(
@@ -130,7 +138,7 @@ async function loadImages(page) {
           ).length > 60,
         );
         assert.equal(
-          await page.locator('meta[property="og:url"]').getAttribute("content"),
+          new URL(await page.locator('meta[property="og:url"]').getAttribute("content")).href,
           "https://solvingodds.com" + route.path,
         );
         await checkLayout(page, width, route.path);
@@ -210,7 +218,7 @@ async function loadImages(page) {
       );
       assert.equal(
         await page.locator(".service-offering-button").count(),
-        4,
+        slug === "medical-billing" ? 10 : 4,
       );
       for (const button of await page
         .locator(".service-offering-button")
@@ -260,9 +268,9 @@ async function loadImages(page) {
 
     // Contact: validation blocks delivery, errors are announced, input kept.
     await ready(page, "/contact");
-    let web3Calls = 0;
+    let contactCalls = 0;
     page.on("request", (request) => {
-      if (request.url().includes("api.web3forms.com")) web3Calls += 1;
+      if (request.url() === web3FormsEndpoint) contactCalls += 1;
     });
     await page.getByRole("button", { name: "Send Inquiry" }).click();
     for (const id of [
@@ -280,7 +288,7 @@ async function loadImages(page) {
       await page.evaluate(() => document.activeElement?.id),
       "contact-full-name",
     );
-    assert.equal(web3Calls, 0);
+    assert.equal(contactCalls, 0);
     await page.fill("#contact-email", "not-an-email");
     await page.locator("#contact-email").blur();
     assert.match(
@@ -290,9 +298,6 @@ async function loadImages(page) {
 
     // Contact: failed delivery shows an honest error and preserves input.
     const errorsBeforeAbort = consoleErrors.length;
-    await page.route("**/api.web3forms.com/submit", (route) =>
-      route.abort("failed"),
-    );
     await page.fill("#contact-full-name", "QA Tester");
     await page.fill("#contact-email", "qa@example.com");
     await page.selectOption("#contact-service", "general-inquiry");
@@ -307,7 +312,6 @@ async function loadImages(page) {
       await page.locator("#contact-full-name").inputValue(),
       "QA Tester",
     );
-    await page.unroute("**/api.web3forms.com/submit");
     // The intentionally aborted request logs one expected resource error.
     const abortErrorIndex = consoleErrors.indexOf(
       "Failed to load resource: net::ERR_FAILED",
@@ -430,11 +434,11 @@ async function loadImages(page) {
     );
 
     // Unknown routes render the branded noindex 404 view.
-    for (const missing of ["/services/not-a-service", "/portfolio"]) {
-      await ready(page, missing);
-      assert.equal(
+    for (const missing of missingPaths) {
+      await ready(page, missing, 404);
+      assert.match(
         await page.locator('meta[name="robots"]').getAttribute("content"),
-        "noindex, follow",
+        /\bnoindex\b/,
       );
       assert.match(await page.locator("main").innerText(), /PAGE NOT FOUND/);
     }
@@ -531,6 +535,59 @@ async function loadImages(page) {
       .locator('.service-introduction-image [role="img"]')
       .waitFor();
     await fallbackContext.close();
+
+    const noScriptContext = await browser.newContext({ javaScriptEnabled: false });
+    const noScriptPage = await noScriptContext.newPage();
+    for (const { path, headline } of routes) {
+      const response = await noScriptPage.goto(base + path);
+      assert.equal(response.status(), 200);
+      const heading = noScriptPage.locator("main h1");
+      await heading.waitFor({ state: "visible" });
+      assert.equal((await heading.innerText()).replace(/\s+/g, " ").trim(), headline);
+    }
+    await noScriptContext.close();
+
+    // Exercise the integration boundary without delivering a real email.
+    const deliveryContext = await browser.newContext({ reducedMotion: "reduce" });
+    for (const width of [1440, 390]) {
+      const deliveryPage = await deliveryContext.newPage();
+      await deliveryPage.setViewportSize({ width, height: 844 });
+      let accepted = false;
+      let inquiry;
+      await deliveryPage.route(web3FormsEndpoint, async (route) => {
+        const headers = {
+          "access-control-allow-origin": "*",
+          "access-control-allow-methods": "POST, OPTIONS",
+          "access-control-allow-headers": "content-type",
+        };
+        if (route.request().method() === "OPTIONS") {
+          await route.fulfill({ status: 204, headers });
+          return;
+        }
+        inquiry = route.request().postDataJSON();
+        await route.fulfill({ headers, json: { success: accepted } });
+      });
+      await ready(deliveryPage, "/contact?service=medical-billing");
+      await deliveryPage.fill("#contact-full-name", "QA Tester");
+      await deliveryPage.fill("#contact-email", "qa@example.com");
+      await deliveryPage.fill("#contact-message", "Testing the contact confirmation after a successful provider response.");
+      const send = deliveryPage.getByRole("button", { name: "Send Inquiry" });
+      const confirmation = deliveryPage.locator("#contact-form").getByRole("status");
+      await send.click();
+      await deliveryPage.locator('[data-submission-status="error"]').waitFor();
+      assert.equal(await confirmation.count(), 0);
+      assert.equal(await deliveryPage.locator("#contact-email").inputValue(), "qa@example.com");
+      accepted = true;
+      await send.click();
+      await confirmation.waitFor();
+      assert.match(await confirmation.innerText(), /INQUIRY RECEIVED/);
+      assert.equal(inquiry.email, "qa@example.com");
+      assert.equal(inquiry.replyto, "qa@example.com");
+      assert.equal(inquiry.botcheck, false);
+      assert.ok(inquiry.access_key, "Build the QA site with a dummy form access key");
+      await deliveryPage.close();
+    }
+    await deliveryContext.close();
 
     // Core Web Vitals sampling (informational; CLS guarded against regressions).
     const vitalsContext = await browser.newContext({

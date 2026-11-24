@@ -1,5 +1,6 @@
+"use client";
+
 import { useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { BRAND } from "../data/homepageContent";
@@ -17,8 +18,7 @@ const FOOTER_NAV = [
   { label: "Contact", href: "/contact" },
 ];
 
-export function Footer() {
-  const { pathname } = useLocation();
+export function Footer({ pathname }: { pathname: string }) {
   const footerRef = useRef<HTMLElement>(null);
   const currentYear = new Date().getFullYear();
   const contactCtaHref = pathname === "/contact" ? "#contact-form" : "/contact";

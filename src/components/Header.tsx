@@ -1,5 +1,6 @@
+"use client";
+
 import { useEffect, useRef, useState } from "react";
-import { useLocation } from "react-router-dom";
 import { BRAND, NAV_ITEMS } from "../data/homepageContent";
 import { SERVICE_LIST, servicePath } from "../data/services";
 import { setScrollLocked } from "../utils/smoothScroll";
@@ -8,8 +9,7 @@ import { KineticButton } from "./ui/KineticButton";
 import { SiteLink } from "./ui/SiteLink";
 import { ServicesDropdown } from "./ServicesDropdown";
 
-export function Header() {
-  const { pathname } = useLocation();
+export function Header({ pathname }: { pathname: string }) {
   const [scrolled, setScrolled] = useState(false);
   const [overLight, setOverLight] = useState(false);
   const routeActiveHref = pathname.startsWith("/services")
