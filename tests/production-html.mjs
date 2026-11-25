@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 const origin = process.env.QA_BASE_URL || "http://localhost:3000";
 const canonicalOrigin = "https://solvingodds.com";
 const pages = {
-  "/": ["Turning complexity into opportunity.", "Kestrel Architectural Practice", "An editorial architecture website concept", "Medical Billing"],
+  "/": ["Turning complexity into opportunity.", "MAVRYO", "Meridian Estate", "LittleCare", "Medical Billing"],
   "/services": ["Different challenges. One place for solutions.", "The right expertise", "Social Media Services"],
   "/services/web-design-development": ["Web experiences that work beautifully.", "The right details.", "What We Offer"],
   "/services/social-media-services": ["Make your brand part of the conversation.", "The right details.", "What We Offer"],

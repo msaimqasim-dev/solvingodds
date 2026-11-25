@@ -95,7 +95,7 @@ export function Hero() {
       aria-label="Hero"
       className="relative flex min-h-[100svh] w-full flex-col justify-between overflow-hidden bg-[#151817] text-white"
     >
-      {/* Full-Bleed Architectural Background Media */}
+      {/* Full-bleed background media */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 overflow-hidden"

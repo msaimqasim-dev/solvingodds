@@ -24,6 +24,7 @@ export type Service = {
     description: string;
     label: string;
     capabilities: string[];
+    image: MediaAsset;
   };
   introduction: {
     headline: string[];
@@ -41,89 +42,15 @@ export type Service = {
   inquiryNote?: string;
 };
 
-function photo(
-  id: number,
-  alt: string,
-  credit: string,
-  label: string,
-): MediaAsset {
+function photo(file: string, alt: string, directory = "services"): MediaAsset {
   return {
-    src: `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=1800`,
+    src: `/images/${directory}/${file}.webp`,
     alt,
-    credit: `Pexels / ${credit}`,
-    fallbackLabel: label,
+    credit: "Pexels",
+    fallbackLabel: alt,
     aspect: "16 / 10",
   };
 }
-
-const media = {
-  studio: photo(
-    9218551,
-    "Sunlit creative workspace with a laptop and sculptural objects beside a large window",
-    "PNW Production",
-    "Creative studio",
-  ),
-  web: photo(
-    7172661,
-    "Dark design studio with widescreen computer monitors and a carefully arranged desk",
-    "Matheus Bertelli",
-    "Web design studio",
-  ),
-  laptop: photo(
-    12882908,
-    "A minimal laptop balanced on natural stone in a considered studio composition",
-    "Leonid Altman",
-    "Digital experiences",
-  ),
-  design: photo(
-    6446678,
-    "Open laptop and ceramic vessels on a timber worktable in a bright design studio",
-    "gravity cut",
-    "Thoughtful website design",
-  ),
-  responsive: photo(
-    9393252,
-    "Desktop computer and smartphone together on a clean wooden workspace",
-    "Mustafa Akkus",
-    "Responsive experiences",
-  ),
-  social: photo(
-    15977090,
-    "Camera, lenses, digital tablet, and laptop arranged for content production",
-    "Kawe Rodrigues",
-    "Content creation studio",
-  ),
-  production: photo(
-    33714923,
-    "Creative team working with professional lighting during a studio photography session",
-    "Matheus Bertelli",
-    "Creative content production",
-  ),
-  camera: photo(
-    265144,
-    "Black and white workspace with a laptop, camera, lens, and a cup of coffee",
-    "Pixabay",
-    "Social content planning",
-  ),
-  billing: photo(
-    10376254,
-    "Overhead view of an administrative specialist reviewing documents beside a laptop and tablet",
-    "RDNE Stock project",
-    "Healthcare administrative support",
-  ),
-  documents: photo(
-    8296953,
-    "Organized administrative desktop with laptop, calculator, and paper records",
-    "Mikhail Nilov",
-    "Organized billing workflows",
-  ),
-  review: photo(
-    5717709,
-    "Administrative professional carefully reviewing financial documents at a laptop",
-    "Kaboompics",
-    "Documentation and review",
-  ),
-};
 
 export const SERVICES: Record<string, Service> = {
   "web-design-development": {
@@ -138,9 +65,10 @@ export const SERVICES: Record<string, Service> = {
     heroLines: ["Web experiences", "that work", "beautifully."],
     heroDescription:
       "We design and develop modern websites that bring together thoughtful visuals, intuitive user experiences, and dependable functionality.",
-    heroImage: media.web,
+    heroImage: photo("web/hero-developer", "Developer working at a curved monitor"),
     heroPosition: "60% center",
     overview: {
+      image: photo("overview-web-development", "Laptop displaying code in a modern workspace"),
       headline: "Digital experiences built with purpose.",
       description:
         "Thoughtfully designed and developed websites that combine clear user experiences, responsive layouts, and modern functionality.",
@@ -158,32 +86,32 @@ export const SERVICES: Record<string, Service> = {
         "Your website is where people get to know your business. We bring structure, design, and development together to make that experience clear, useful, and unmistakably yours.",
       approach:
         "We start with your audience, content, and business goals, then shape a digital experience around them. From the first navigation sketch to the final responsive build, every decision has a purpose.",
-      image: media.laptop,
+      image: photo("web/introduction-laptop", "People reviewing a business plan on a laptop"),
     },
     offerings: [
       {
         title: "Website Design",
         description:
           "Custom website design built around your brand identity, content, and business goals. We develop layouts, typography, and visual direction that help visitors understand your business and find their next step.",
-        image: media.design,
+        image: photo("web/offering-website-design", "Design workspace with color swatches"),
       },
       {
         title: "Website Development",
         description:
           "Development of modern, functional websites with maintainable code and responsive layouts. We translate the agreed design into a working experience with considered navigation and the functionality your project requires.",
-        image: media.web,
+        image: photo("web/offering-development", "People pointing at code on a laptop screen"),
       },
       {
         title: "Responsive Web Experiences",
         description:
           "Websites designed to deliver a consistent experience across desktop, tablet, and mobile devices. Content, imagery, and interactions adapt to the screen rather than simply shrinking a desktop layout.",
-        image: media.responsive,
+        image: photo("web/offering-responsive", "Laptop and smartphone in a modern workspace"),
       },
       {
         title: "UI/UX Design",
         description:
           "Thoughtful interfaces, intuitive navigation, and clear content structures that make websites easier to use. We consider user journeys and important actions so the experience stays focused and understandable.",
-        image: media.laptop,
+        image: photo("web/offering-ui-ux", "Person designing on a tablet with a stylus"),
       },
     ],
     process: [
@@ -277,9 +205,10 @@ export const SERVICES: Record<string, Service> = {
     heroLines: ["Make your brand", "part of the", "conversation."],
     heroDescription:
       "We help businesses create, manage, and maintain a consistent social media presence through thoughtful content, creative design, and structured account management.",
-    heroImage: media.social,
+    heroImage: photo("social/hero-production", "Video production equipment in a modern studio"),
     heroPosition: "65% center",
     overview: {
+      image: photo("overview-social-production", "Behind-the-scenes video production setup"),
       headline: "A stronger presence starts with a clear strategy.",
       description:
         "Social media management, creative content, and visual communication that help businesses maintain a consistent and engaging presence.",
@@ -297,32 +226,32 @@ export const SERVICES: Record<string, Service> = {
         "Showing up online should feel like an extension of your business. We connect content planning, creative execution, and account management to give your social presence a considered direction.",
       approach:
         "We get to know your brand and audience before creating content themes and a practical workflow. Ideas, visuals, reviews, and publishing are organized around a shared understanding of your goals.",
-      image: media.production,
+      image: photo("social/introduction-planning", "Person preparing marketing plans on a laptop"),
     },
     offerings: [
       {
         title: "Social Media Management",
         description:
           "Support with organizing, managing, and maintaining business social media accounts. We establish a practical posting and review workflow so your communication stays coordinated and consistent.",
-        image: media.camera,
+        image: photo("social/offering-management", "Person working with a content planner"),
       },
       {
         title: "Content Creation",
         description:
           "Social media content designed to communicate your message and support a consistent brand presence. We shape content ideas, copy, and visual direction around your audience and agreed content themes.",
-        image: media.production,
+        image: photo("social/offering-content", "Camera operator working on set"),
       },
       {
         title: "Graphic Design",
         description:
           "Branded graphics and visual content created for social media platforms. Layouts, typography, and imagery work together to make posts recognizable and appropriate for each format.",
-        image: media.social,
+        image: photo("social/offering-graphic-design", "Designer working at a computer"),
       },
       {
         title: "Social Media Strategy",
         description:
           "Planning content themes, communication direction, and posting approaches around business objectives. A clear plan helps connect everyday content decisions to the bigger picture.",
-        image: media.camera,
+        image: photo("social/offering-strategy", "Team discussing printed charts"),
       },
     ],
     process: [
@@ -416,9 +345,10 @@ export const SERVICES: Record<string, Service> = {
     heroLines: ["Simplifying the", "business side", "of healthcare."],
     heroDescription:
       "SolvingOdds provides medical billing support, provider credentialing and enrollment, claim production, and accounts receivable follow-up for healthcare practices.",
-    heroImage: media.billing,
+    heroImage: photo("billing/hero-paperwork", "Insurance paperwork beside hands typing on a laptop"),
     heroPosition: "65% center",
     overview: {
+      image: photo("overview-billing-review", "Person examining documents"),
       headline: "Focused support for the business side of healthcare.",
       description:
         "Medical billing and revenue cycle support covering provider enrollment, claims, and accounts receivable processes.",
@@ -436,68 +366,68 @@ export const SERVICES: Record<string, Service> = {
         "The administrative side of healthcare involves connected processes, detailed information, and ongoing follow-up. We provide focused support across those workflows so responsibilities and next steps stay clear.",
       approach:
         "We begin by understanding your practice's existing processes and the areas where support is needed. We then agree on the scope, working arrangements, and review points for credentialing, enrollment, billing, claims, or accounts receivable.",
-      image: media.documents,
+      image: photo("billing/introduction-clinic", "Healthcare professionals in a clinic"),
     },
     offerings: [
       {
         title: "Medical Billing",
         description:
           "We handle medical billing processes, including claim preparation, submission, and payment tracking. Our support helps healthcare practices maintain organized billing workflows and follow up on outstanding reimbursements.",
-        image: media.billing,
+        image: photo("billing/offering-billing", "Person working with documents and a calculator"),
       },
       {
         title: "Medical Billing Audit",
         description:
           "We review billing procedures, submitted claims, and payment records to identify potential errors and discrepancies. Our auditing support helps practices recognize improvement opportunities and maintain more accurate billing processes.",
-        image: media.review,
+        image: photo("billing/offering-audit", "Person filling in paperwork"),
       },
       {
         title: "Prior Authorization",
         description:
           "We assist with insurance prior authorization requests, required documentation, and payer follow-ups. Our team helps practices coordinate authorization processes and track pending requests.",
-        image: media.documents,
+        image: photo("billing/offering-prior-authorization", "Healthcare professionals reviewing paperwork in a clinic"),
       },
       {
         title: "Revenue Cycle Management (RCM)",
         description:
           "We provide revenue cycle support covering patient eligibility verification, claims processing, payment tracking, and follow-up. Our services help healthcare practices coordinate administrative billing activities throughout the revenue cycle.",
-        image: media.billing,
+        image: photo("billing/offering-revenue-cycle", "Bar chart and statistics on a laptop screen"),
       },
       {
         title: "Accounts Receivable (A/R) Follow-Up",
         description:
           "We monitor outstanding claims and unpaid insurance balances to identify items requiring attention. Our team follows up with payers and tracks unresolved payments to support organized accounts receivable management.",
-        image: media.review,
+        image: photo("billing/offering-receivables", "Calculator and financial report on a desk"),
       },
       {
         title: "Virtual Assistant Services",
         description:
           "We provide remote administrative assistance for healthcare practices, including appointment coordination, routine communications, and documentation support. Our virtual assistants help manage daily administrative responsibilities within agreed workflows.",
-        image: media.billing,
+        image: photo("billing/offering-virtual-assistant", "Call center agent working on a laptop"),
       },
       {
         title: "Insurance Verification",
         description:
           "We assist with verifying patient insurance eligibility, coverage details, and benefit information. Our support helps practices identify coverage-related questions before services are provided.",
-        image: media.documents,
+        image: photo("expertise-billing-documents", "Person holding paperwork", "about"),
       },
       {
         title: "Credentialing & Contracting",
         description:
           "We assist healthcare providers with credentialing, insurance enrollment, payer contracting documentation, and application follow-ups. Our support helps practices manage administrative requirements for participating in insurance networks.",
-        image: media.review,
+        image: photo("billing/offering-credentialing", "Healthcare professionals reviewing a clipboard"),
       },
       {
         title: "Denial Management",
         description:
           "We review denied claims, identify reported denial reasons, and assist with corrections, resubmissions, and appropriate appeals. Our support helps practices track denials and manage unresolved claims.",
-        image: media.documents,
+        image: photo("billing/offering-denials", "Person examining a document"),
       },
       {
         title: "Front Desk Support",
         description:
           "We provide remote front-desk assistance with appointment scheduling, patient registration coordination, and routine administrative communication. Our support helps healthcare practices organize daily front-office activities.",
-        image: media.billing,
+        image: photo("billing/offering-front-desk", "Two people reviewing a calendar at a desk"),
       },
     ],
     process: [
@@ -595,7 +525,7 @@ export const SERVICES_OVERVIEW = {
   heroLines: ["Different challenges.", "One place for", "solutions."],
   description:
     "From designing digital experiences and managing social media to supporting healthcare revenue operations, SolvingOdds brings together specialized services designed around your business needs.",
-  image: media.studio,
+  image: photo("overview-team", "Team reviewing data on a laptop"),
   introduction:
     "A website that feels right. A social presence with direction. An administrative workflow that is easier to follow. Our three service areas respond to different challenges with the same clear, considered approach.",
   process: [

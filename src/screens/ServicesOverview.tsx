@@ -74,9 +74,9 @@ export function ServicesOverview() {
                 >
                   <div className="editorial-parallax h-full w-full">
                     <EditorialImage
-                      src={service.introduction.image.src}
-                      alt={service.introduction.image.alt}
-                      fallbackLabel={service.introduction.image.fallbackLabel}
+                      src={service.overview.image.src}
+                      alt={service.overview.image.alt}
+                      fallbackLabel={service.overview.image.fallbackLabel}
                       tone="light"
                       className="h-full w-full"
                     />

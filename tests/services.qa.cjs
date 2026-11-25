@@ -523,7 +523,7 @@ async function loadImages(page) {
     const fallbackContext = await browser.newContext({
       reducedMotion: "reduce",
     });
-    await fallbackContext.route("**/images.pexels.com/**", (route) =>
+    await fallbackContext.route("**/images/services/billing/introduction-clinic.webp", (route) =>
       route.abort(),
     );
     const fallbackPage = await fallbackContext.newPage();

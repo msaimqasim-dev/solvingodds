@@ -36,11 +36,11 @@ export const ABOUT_PAGE = {
     description:
       "SolvingOdds brings together creative digital services and specialized business support to help organizations address challenges with clarity, creativity, and practical solutions.",
     image: {
-      src: "https://images.pexels.com/photos/39863282/pexels-photo-39863282.jpeg?auto=compress&cs=tinysrgb&w=1800",
-      alt: "Sunlit modern architectural interior with geometric skylight beams casting crisp shadows across quiet walls",
+      src: "/images/about/hero-creative-team.webp",
+      alt: "Creative team meeting in a modern studio",
       aspect: "21 / 9",
-      credit: "Pexels / Adrien Olichon",
-      fallbackLabel: "SolvingOdds Architectural Perspective",
+      credit: "Pexels",
+      fallbackLabel: "Creative team meeting in a modern studio",
     } as MediaAsset,
   },
   story: {
@@ -51,18 +51,18 @@ export const ABOUT_PAGE = {
       "Our approach starts with understanding what a business needs. From there, we focus on creating clear, purposeful solutions rather than making things unnecessarily complicated.",
     ],
     primaryImage: {
-      src: "https://images.pexels.com/photos/32510767/pexels-photo-32510767.jpeg?auto=compress&cs=tinysrgb&w=1400",
-      alt: "Minimalist architectural corridor shaped by clean geometry, warm directional light, and balanced shadow",
+      src: "/images/about/story-brainstorming.webp",
+      alt: "Person arranging ideas on a wall of sticky notes",
       aspect: "4 / 5",
-      credit: "Pexels / Can Ceylan",
-      fallbackLabel: "Architectural Form & Light",
+      credit: "Pexels",
+      fallbackLabel: "Person arranging ideas on a wall of sticky notes",
     } as MediaAsset,
     secondaryImage: {
-      src: "https://images.pexels.com/photos/4466711/pexels-photo-4466711.jpeg?auto=compress&cs=tinysrgb&w=1600",
-      alt: "Minimalist concrete passageway illuminated by measured lines of natural daylight",
+      src: "/images/about/story-collaboration.webp",
+      alt: "Colleagues brainstorming together",
       aspect: "16 / 10",
-      credit: "Pexels / Andreas Maier",
-      fallbackLabel: "Clarity & Direction",
+      credit: "Pexels",
+      fallbackLabel: "Colleagues brainstorming together",
     } as MediaAsset,
   },
   expertise: {
@@ -78,11 +78,11 @@ export const ABOUT_PAGE = {
           "Digital experiences that combine thoughtful design, intuitive usability, and modern development.",
         href: servicePath("web-design-development"),
         image: {
-          src: "https://images.pexels.com/photos/7172661/pexels-photo-7172661.jpeg?auto=compress&cs=tinysrgb&w=1400",
-          alt: "Dark design studio workspace with dual monitors prepared for website design and frontend development",
+          src: "/images/about/expertise-web-development.webp",
+          alt: "Person using a desktop computer and laptop",
           aspect: "16 / 10",
-          credit: "Pexels / Matheus Bertelli",
-          fallbackLabel: "Web Design & Development",
+          credit: "Pexels",
+          fallbackLabel: "Person using a desktop computer and laptop",
         },
       },
       {
@@ -94,11 +94,11 @@ export const ABOUT_PAGE = {
           "Creative content, visual communication, and social media management for a consistent online presence.",
         href: servicePath("social-media-services"),
         image: {
-          src: "https://images.pexels.com/photos/15977090/pexels-photo-15977090.jpeg?auto=compress&cs=tinysrgb&w=1400",
-          alt: "Camera, lenses, digital tablet, and laptop arranged for creative social media content production",
+          src: "/images/about/expertise-social-production.webp",
+          alt: "Film crew working behind the scenes",
           aspect: "16 / 10",
-          credit: "Pexels / Kawê Rodrigues",
-          fallbackLabel: "Social Media Services",
+          credit: "Pexels",
+          fallbackLabel: "Film crew working behind the scenes",
         },
       },
       {
@@ -110,11 +110,11 @@ export const ABOUT_PAGE = {
           "Administrative revenue cycle support covering provider enrollment, billing, claim production, and accounts receivable work.",
         href: servicePath("medical-billing"),
         image: {
-          src: "https://images.pexels.com/photos/10376254/pexels-photo-10376254.jpeg?auto=compress&cs=tinysrgb&w=1400",
-          alt: "Overhead view of structured administrative records, laptop, and tablet on an organized desk",
+          src: "/images/about/expertise-billing-documents.webp",
+          alt: "Person holding paperwork",
           aspect: "16 / 10",
-          credit: "Pexels / RDNE Stock project",
-          fallbackLabel: "Medical Billing Services",
+          credit: "Pexels",
+          fallbackLabel: "Person holding paperwork",
         },
       },
     ] as AboutExpertiseItem[],
@@ -149,11 +149,11 @@ export const ABOUT_PAGE = {
     intro:
       "Whether a project involves building a website, shaping social communication, or organizing healthcare billing workflows, our work follows four grounded stages.",
     image: {
-      src: "https://images.pexels.com/photos/7870751/pexels-photo-7870751.jpeg?auto=compress&cs=tinysrgb&w=1400",
-      alt: "Minimalist sunlit interior column casting quiet directional shadows across a clean architectural surface",
+      src: "/images/about/approach-planning.webp",
+      alt: "Technical plan beside a tablet and laptop",
       aspect: "4 / 3",
-      credit: "Pexels / cottonbro studio",
-      fallbackLabel: "Considered Way Forward",
+      credit: "Pexels",
+      fallbackLabel: "Technical plan beside a tablet and laptop",
     } as MediaAsset,
     stages: [
       {
